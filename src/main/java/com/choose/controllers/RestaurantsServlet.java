@@ -53,7 +53,10 @@ public class RestaurantsServlet extends HttpServlet {
 		List<Restaurant> restaurants = null;
 		
 		String location = URLEncoder.encode(request.getParameter("location"), "UTF-8");
+		String category = URLEncoder.encode(request.getParameter("food-category"), "UTF-8");
+		
 		System.out.println("LOCATION: " + location);
+		System.out.println("CATEGORY: " + category);
 
 		if (location.equals("")) {
 			// go to jsp page to display message for empty input
@@ -61,7 +64,7 @@ public class RestaurantsServlet extends HttpServlet {
 		} else {
 
 			try {
-				restaurants = getRestaurants(location);
+				restaurants = getRestaurants(location, category);
 				if (restaurants == null)
 					request.getRequestDispatcher("/jsp/Error.jsp").forward(request, response);
 			} catch (IOException e) {
@@ -86,20 +89,22 @@ public class RestaurantsServlet extends HttpServlet {
 
 			request.setAttribute("restaurants", restaurants);
 			
-			request.getRequestDispatcher("index.jsp").forward(request, response);
+			request.getRequestDispatcher("/jsp/DisplayRestaurants.jsp").forward(request, response);
 		}
 		
 
 	}
 
-	private List<Restaurant> getRestaurants(String location) throws IOException, InterruptedException, ParseException {
+	private List<Restaurant> getRestaurants(String location, String category) throws IOException, InterruptedException, ParseException {
 		// Yelp API
 
 		List<Restaurant> listOfRestaurants = new ArrayList<>();
-
+		System.out.println("https://api.yelp.com/v3/businesses/search?location="
+				+ location + "&term=restaurants&categories="+category+"&sort_by=distance&limit=20");
+		
 		HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create("https://api.yelp.com/v3/businesses/search?location="
-						+ location + "&term=restaurants&sort_by=distance&limit=20"))
+						+ location + "&term=restaurants&categories="+category+"&sort_by=distance&limit=20"))
 				.header("accept", "application/json")
 				.header("Authorization",
 						"Bearer UeEfJeXHxOUatPXE8LiXaQ3FjXceDE7LBW1iVUE41RX0KRkYvbDoGrs1hlE2EWynoyPW5Np7di4_Am2O2wvdzjKMlLDaxm8gKTHeNIlunD9rGwWMIlG4MViyEGnbY3Yx")
@@ -111,7 +116,6 @@ public class RestaurantsServlet extends HttpServlet {
 		JSONObject jsonObject = (JSONObject) jsonParser.parse(response.body());
 
 		JSONArray businesses = (JSONArray) jsonObject.get("businesses");
-		
 		if(businesses == null) {
 			return null;
 		}

@@ -8,6 +8,6 @@
 </head>
 <body>
 Location Not Found.
-<button onclick="window.location.href='WebContent/index.jsp'">Back to search</button>
+<button onclick="window.location.href='/jsp/index.jsp'">Back to search</button>
 </body>
 </html>

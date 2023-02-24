@@ -6,7 +6,6 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Choose For Me</title>
-
 <script>
 	function getCurrentLocation(){
 		if(navigator.geolocation){
@@ -23,6 +22,7 @@
 	        locationInput.value = latitude + ", " + longitude;
 	  }
 </script>
+
 </head>
 <body>
 	<h1>Choose For Me</h1>
@@ -32,27 +32,19 @@
 		
 			
 			<input type="text" name="location" id="location">
+			<select id="food-category" name="food-category">
+				<option value="korean">Korean</option>
+				<option value="japanese">Japanese</option>
+				<option value="vietnamese">Vietnamese</option>
+				<option value="american">American</option>
+				<option value="french">French</option>
+				<option value="italian">Italian</option>
+			</select>
 			<input type="submit" value="search">
+			
 			
 	</form>
 	<button onclick="getCurrentLocation()">Use Current Location</button>
 	<br>
-
-
-
-	<c:forEach var="restaurants" items="${restaurants}">
-
-
-		<tr>
-			<td><c:out value="${restaurants.name}" /><br></td>
-		</tr>
-
-	</c:forEach>
-
-
-	<div>
-		<button onClick="window.location.href=window.location.href">Choose</button>
-		<p>CHOSEN: ${randRestaurant.name}</p>
-	</div>
 </body>
 </html>
